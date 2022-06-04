@@ -6,6 +6,7 @@ import Logo from "../assets/loveLogo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loginRoute } from "../utils/APIRoutes";
+import sky1 from "../assets/sky1.jpg";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -51,6 +52,8 @@ export default function Login() {
         toast.error(data.msg, toastOptions);
       }
       if (data.status === true) {
+        const matchs = Object.assign(data.user, { matchs: data.matchs });
+        const friends = Object.assign(data.user, { friends: data.friends });
         localStorage.setItem(
           process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(data.user)
@@ -100,7 +103,8 @@ const FormContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   align-items: center;
-  background-color: #ff6f47;
+  background: url(${sky1});
+  background-size: cover;
   .brand {
     display: flex;
     align-items: center;

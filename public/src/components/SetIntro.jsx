@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { setIntroRoute } from "../utils/APIRoutes";
 import Select from "react-select";
-
+import introbackground from "../assets/bg-intro.jpg";
 export default function SetIntro() {
   const navigate = useNavigate();
   const [values, setValues] = useState({
@@ -24,55 +24,51 @@ export default function SetIntro() {
     { value: "girl", label: "生理女" },
   ];
   const gangOptions = [
-    { value: "upDormitory", label: "山上宿舍" },
-    { value: "downDormitory", label: "山下宿舍" },
-    { value: "majorOffice", label: "係辦" },
+    { value: "山上宿舍", label: "山上宿舍" },
+    { value: "山下宿舍", label: "山下宿舍" },
+    { value: "係辦", label: "係辦" },
   ];
   const habitOptions = [
-    { value: "sports", label: "運動" },
-    { value: "indieband", label: "獨立樂團" },
-    { value: "smoking", label: "煙庭" },
-    { value: "toxic", label: "講話酸言酸語><" },
-    { value: "apple", label: "apple" },
-    { value: "weiweisneeze", label: "陳威" },
-    { value: "cheating", label: "考試去廁所作弊" },
-    { value: "kpop", label: "kpop" },
-    { value: "jpop", label: "jpop" },
-    { value: "tea", label: "喝茶局" },
-    { value: "computer", label: "打電動" },
-    { value: "avideo", label: "美劇" },
-    { value: "jvideo", label: "日劇" },
-    { value: "dish", label: "洗碗做家事" },
-    { value: "ntr", label: "ntr" },
-    { value: "bl", label: "BL" },
-    { value: "weeb", label: "溫情阿宅" },
-    { value: "love", label: "暈船" },
-    { value: "tinder", label: "交友軟體" },
-    { value: "lazypasta", label: "lazy pasta" },
-    { value: "shonpin", label: "小尚品" },
-    { value: "apex", label: "跳傘小隊" },
-    { value: "smoking2", label: "給老師吸二手菸" },
-    { value: "makio", label: "打蚊子" },
+    { value: "周致遠", label: "周致遠" },
+    { value: "貓空喝茶", label: "貓空喝茶" },
+    { value: "獨立樂團", label: "獨立樂團" },
+    { value: "煙庭", label: "煙庭" },
+    { value: "講話酸言酸語><", label: "講話酸言酸語><" },
+    { value: "操場曬太陽", label: "操場曬太陽" },
+    { value: "雄鷹比賽", label: "雄鷹比賽" },
+    { value: "望遠亭看夜景", label: "望遠亭看夜景" },
+    { value: "小橘&胖虎", label: "小橘&胖虎" },
+    { value: "達賢圖書館", label: "達賢圖書館" },
+    { value: "半夜吃海底撈", label: "半夜吃海底撈" },
+    { value: "酒吧喝酒", label: "酒吧喝酒" },
+    { value: "在安九打麻將", label: "在安九打麻將" },
+    { value: "恆光橋烤肉&喝酒", label: "恆光橋烤肉&喝酒" },
+    { value: "期中交流版", label: "期中交流版" },
+    { value: "看螢火蟲", label: "看螢火蟲" },
+    { value: "總圖自習室24小時都開著", label: "總圖自習室24小時都開著" },
+    { value: "金旋獎", label: "金旋獎" },
+    { value: "暈船", label: "暈船" },
+    { value: "小公寓摸貓咪", label: "小公寓摸貓咪" },
   ];
   const hateOptions = [
-    { value: "self", label: "我自己" },
-    { value: "indieband", label: "獨立樂團" },
-    { value: "smoking", label: "煙庭" },
-    { value: "dish", label: "洗碗做家事" },
-    { value: "bl", label: "BL" },
-    { value: "weeb", label: "溫情阿宅" },
-    { value: "love", label: "暈船" },
-    { value: "lazypasta", label: "lazy pasta" },
-    { value: "shonpin", label: "小尚品" },
-    { value: "toxic", label: "講話酸言酸語><" },
-    { value: "android", label: "android" },
-    { value: "others", label: "聖母" },
-    { value: "Rla", label: "阿語系" },
-    { value: "bitch", label: "管家婆" },
+    { value: "我自己", label: "我自己" },
+    { value: "單身", label: "單身" },
+    { value: "暈船", label: "暈船" },
+    { value: "五期六期體育課", label: "五期六期體育課" },
+    { value: "期中末考", label: "期中末考" },
+    { value: "回宿舍要爬山", label: "回宿舍要爬山" },
+    { value: "校園公車司機太兇", label: "校園公車司機太兇" },
+    { value: "沒有好吃的", label: "沒有好吃的" },
+    { value: "沒中宿舍/宿舍很破", label: "沒中宿舍/宿舍很破" },
+    { value: "政大很偏遠", label: "政大很偏遠" },
+    { value: "覺青", label: "覺青" },
+    { value: "聖母", label: "聖母" },
+    { value: "狗后跟她的瘋狗", label: "狗后跟她的瘋狗" },
+    { value: "課很難選", label: "課很難選" },
   ];
   const positiveOptions = [
-    { value: "yes", label: "Yes" },
-    { value: "no", label: "No" },
+    { value: "確診寶寶", label: "Yes" },
+    { value: "沒確診超人", label: "No" },
   ];
 
   const toastOptions = {
@@ -82,11 +78,11 @@ export default function SetIntro() {
     draggable: true,
     theme: "dark",
   };
+
   useEffect(async () => {
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
       navigate("/login");
   }, []);
-
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
@@ -139,6 +135,8 @@ export default function SetIntro() {
       const user = await JSON.parse(
         localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
+      console.log(user);
+      console.log(user._id);
       const { data } = await axios.post(`${setIntroRoute}/${user._id}`, {
         age,
         home,
@@ -162,7 +160,7 @@ export default function SetIntro() {
 
   return (
     <>
-      <FormContainer>
+      <FormContainer className="FormContainer">
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
             <h1>NCCUpid Introduction</h1>
@@ -234,16 +232,19 @@ export default function SetIntro() {
 }
 
 const FormContainer = styled.div`
+  width: 100vh;
   height: 100vh;
-  width: 100vw;
-  height: 100%;
+  width: 100%;
   margin: 0;
   display: flex;
+  overflow: -moz-scrollbars-vertical;
+  overflow-y: auto;
   flex-direction: column;
   justify-content: center;
   gap: 1rem;
   align-items: center;
-  background-color: #ff6f47;
+  background: url(${introbackground});
+  background-size: cover;
   .brand {
     display: flex;
     align-items: center;
@@ -261,6 +262,7 @@ const FormContainer = styled.div`
   form {
     display: flex;
     flex-direction: column;
+    max-width: 50%;
     gap: 1.5rem;
     background-color: #ffffff;
     border-radius: 2rem;

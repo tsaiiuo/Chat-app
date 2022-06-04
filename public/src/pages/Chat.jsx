@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { allUsersRoute, host } from "../utils/APIRoutes";
 import ChatContainer from "../components/ChatContainer";
 import Contacts from "../components/Contacts";
-import Welcome from "../components/Welcome";
+import Match from "../components/Match";
 import sky1 from "../assets/sky1.jpg";
 
 export default function Chat() {
@@ -59,7 +59,7 @@ export default function Chat() {
         <div className="container">
           <Contacts contacts={contacts} changeChat={handleChatChange} />
           {currentChat === undefined ? (
-            <Welcome />
+            <Match />
           ) : (
             <ChatContainer currentChat={currentChat} socket={socket} />
           )}
@@ -83,7 +83,7 @@ const Container = styled.div`
     height: 85vh;
     width: 85vw;
     display: grid;
-    background-color: #f5f2f3;
+    background-color: #ff8563;
     grid-template-columns: 25% 75%;
     @media screen and (min-width: 720px) and (max-width: 1080px) {
       grid-template-columns: 35% 65%;

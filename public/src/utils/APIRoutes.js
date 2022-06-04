@@ -7,3 +7,7 @@ export const sendMessageRoute = `${host}/api/messages/addmsg`;
 export const recieveMessageRoute = `${host}/api/messages/getmsg`;
 export const setAvatarRoute = `${host}/api/auth/setavatar`;
 export const setIntroRoute = `${host}/api/auth/setintro`;
+export const newmatchRoute = `${host}/api/auth/newmatch`;
+export const getmatchsRoute = `${host}/api/auth/getmatchs`;
+export const getoneUserRoute = `${host}/api/auth/getuser`;
+export const friendRequestRoute = `${host}/api/auth/friendrequest`;

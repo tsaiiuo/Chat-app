@@ -5,8 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { registerRoute } from "../utils/APIRoutes";
-
+import { registerRoute, newmatchRoute } from "../utils/APIRoutes";
+import sky1 from "../assets/sky1.jpg";
 export default function Register() {
   const navigate = useNavigate();
   const toastOptions = {
@@ -70,6 +70,9 @@ export default function Register() {
         email,
         password,
       });
+      const { match } = await axios.post(newmatchRoute, {
+        userID: data.user._id,
+      });
 
       if (data.status === false) {
         toast.error(data.msg, toastOptions);
@@ -79,7 +82,7 @@ export default function Register() {
           process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(data.user)
         );
-        navigate("/");
+        navigate("/login");
       }
     }
   };
@@ -135,7 +138,8 @@ const FormContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   align-items: center;
-  background-color: #ff6f47;
+  background: url(${sky1});
+  background-size: cover;
   .brand {
     display: flex;
     align-items: center;

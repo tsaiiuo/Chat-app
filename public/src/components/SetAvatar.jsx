@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Buffer } from "buffer";
-import loader from "../assets/loader.gif";
+import loader from "../assets/angryface.gif";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -69,6 +69,7 @@ export default function SetAvatar() {
       {isLoading ? (
         <Container>
           <img src={loader} alt="loader" className="loader" />
+          <h1>Loading...</h1>
         </Container>
       ) : (
         <Container>
@@ -109,12 +110,17 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 3rem;
-  background-color: #131324;
+  background-color: #ff6f47;
   height: 100vh;
   width: 100vw;
 
   .loader {
     max-inline-size: 100%;
+  }
+  
+    h1 {
+      color: white;
+    }
   }
 
   .title-container {

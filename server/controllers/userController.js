@@ -1,9 +1,11 @@
 const User = require("../models/userModel");
+const Matchs = require("../models/matchModel");
 const bcrypt = require("bcrypt");
-
 module.exports.login = async (req, res, next) => {
   try {
     const { username, password } = req.body;
+    const matchs = [];
+    const friends = [];
     const user = await User.findOne({ username });
     if (!user)
       return res.json({ msg: "Incorrect Username or Password", status: false });
@@ -13,8 +15,42 @@ module.exports.login = async (req, res, next) => {
         msg: "Incorrect Username or Password1",
         status: false,
       });
+
+    const match = await Matchs.findOne({ owner: user._id });
+
+    for (let i = 0; i < match.matchs.length; i++) {
+      if (!match.matchs[i].comfirm) {
+        matchs.push(
+          await User.findOne({
+            _id: match.matchs[i].match,
+          }).select([
+            "email",
+            "username",
+            "avatarImage",
+            "_id",
+            "habits",
+            "hates",
+            "positive",
+            "major",
+            "age",
+            "gender",
+            "gangs",
+            "home",
+          ])
+        );
+      }
+    }
+
+    for (let i = 0; i < match.friends.length; i++) {
+      friends.push(
+        await User.findOne({
+          _id: match.friends[i].friend,
+        }).select(["email", "username", "avatarImage", "_id"])
+      );
+    }
     delete user.password;
-    return res.json({ status: true, user });
+
+    return res.json({ status: true, user, matchs: matchs, friends });
   } catch (ex) {
     next(ex);
   }
@@ -44,13 +80,43 @@ module.exports.register = async (req, res, next) => {
 
 module.exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find({ _id: { $ne: req.params.id } }).select([
+    // const users = await User.find({ _id: { $ne: req.params.id } }).select([
+    //   "email",
+    //   "username",
+    //   "avatarImage",
+    //   "_id",
+    // ]);
+    const friends = [];
+    const match = await Matchs.findOne({ owner: req.params.id });
+    for (let i = 0; i < match.friends.length; i++) {
+      friends.push(
+        await User.findOne({
+          _id: match.friends[i].friend,
+        }).select(["email", "username", "avatarImage", "_id"])
+      );
+    }
+
+    return res.json(friends);
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+module.exports.getOneUser = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: { $ne: req.params.id } }).select([
       "email",
       "username",
       "avatarImage",
       "_id",
+      "habits",
+      "hates",
+      "positive",
+      "major",
+      "age",
+      "gender",
     ]);
-    return res.json(users);
+    return res.json(user);
   } catch (ex) {
     next(ex);
   }
@@ -60,8 +126,7 @@ module.exports.setIntro = async (req, res, next) => {
   try {
     const userId = req.params.id;
     const { age, home, major, gang, habit, hate, positive, gender } = req.body;
-    const user = await User.findOne({ userId });
-    console.log(gang);
+    const user = await User.findOne({ _id: userId });
     for (let i = 0; i < gang.length; i++) {
       user.gangs.push(gang[i]);
     }
