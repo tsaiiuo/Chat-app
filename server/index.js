@@ -3,11 +3,13 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
+const path = require("path");
 const app = express();
 const socket = require("socket.io");
 require("dotenv").config();
 const schedule = require("node-schedule");
 const { createMatch, newMatch } = require("./controllers/matchController");
+const { patch } = require("./routes/auth");
 app.use(cors());
 app.use(express.json());
 const MONGO_URL =
