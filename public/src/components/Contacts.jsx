@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Logo from "../assets/loveLogo.png";
-
+import Logout from "./Logout";
+import Home from "./Home";
 export default function Contacts({ contacts, changeChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
@@ -16,6 +17,10 @@ export default function Contacts({ contacts, changeChat }) {
   const changeCurrentChat = (index, contact) => {
     setCurrentSelected(index);
     changeChat(contact);
+  };
+  const change = () => {
+    console.log(12345);
+    changeChat(undefined);
   };
   return (
     <>
@@ -48,7 +53,7 @@ export default function Contacts({ contacts, changeChat }) {
               );
             })}
           </div>
-          <div className="current-user">
+          <button className="current-user" onClick={change}>
             <div className="avatar">
               <img
                 src={`data:image/svg+xml;base64,${currentUserImage}`}
@@ -58,7 +63,11 @@ export default function Contacts({ contacts, changeChat }) {
             <div className="username">
               <h2>{currentUserName}</h2>
             </div>
-          </div>
+            <div className="Button">
+              <Home onClick={change} />
+              <Logout />
+            </div>
+          </button>
         </Container>
       )}
     </>
@@ -122,13 +131,24 @@ const Container = styled.div`
       background-color: #9a86f3;
     }
   }
+  button {
+    border: none;
+    font-weight: bold;
+  }
 
   .current-user {
-    background-color: #ff6f47;
+    background-color: #9a86f3;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 2rem;
+    .Button {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
     .avatar {
       img {
         height: 4rem;

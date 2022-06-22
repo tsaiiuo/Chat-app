@@ -8,10 +8,11 @@ import sky from "../assets/bg-match.jpg";
 import loader from "../assets/angryface.gif";
 import axios from "axios";
 import { friendRequestRoute } from "../utils/APIRoutes";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 export default function Match() {
   const [user, setUser] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [friendRequest, setFriendRequest] = useState(false);
+  const [matchBox, setMatchBox] = useState(0);
   useEffect(async () => {
     setUser(
       await JSON.parse(
@@ -20,19 +21,41 @@ export default function Match() {
     );
   }, []);
   useEffect(async () => {
-    if (user.matchs.length > 0) {
-      setIsLoading(false);
+    if (user) {
+      if (user.matchs.length > 0) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+      }
     }
   }, [user]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("123");
+    const time = new Date().getMonth() + 1 + "月" + new Date().getDate() + "日";
+    console.log(time);
     const { data } = await axios.post(`${friendRequestRoute}/`, {
       userID: user._id,
-      friendID: user.matchs[0]._id,
+      friendID: user.matchs[matchBox]._id,
+      time,
     });
+    changeFriendRequest();
   };
+  const changeFriendRequest = () => {
+    setFriendRequest(true);
+    console.log(friendRequest);
+  };
+
+  const changeMatchBox = () => {
+    if (matchBox < user.matchs.length - 1) {
+      const count = matchBox + 1;
+      setMatchBox(count);
+      setFriendRequest(false);
+      console.log(matchBox);
+    }
+    // console.log(matchBox);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -45,21 +68,22 @@ export default function Match() {
           <form action="" onSubmit={(event) => handleSubmit(event)}>
             <div className="brand">
               <img
-                src={`data:image/svg+xml;base64,${user.matchs[0].avatarImage}`}
+                src={`data:image/svg+xml;base64,${user.matchs[matchBox].avatarImage}`}
                 alt=""
               />
               <h1>
-                {user.matchs[0].username}({user.matchs[0].age})
+                {user.matchs[matchBox].username}({user.matchs[matchBox].age})
               </h1>
             </div>
             <div className="info-match">
-              {user.matchs[0].gender === "boy" ? (
-                <h1>{user.matchs[0].major}男同學 </h1>
+              {user.matchs[matchBox].gender === "boy" ? (
+                <h1>{user.matchs[matchBox].major}男同學 </h1>
               ) : (
-                <h1>{user.matchs[0].major}女同學</h1>
+                <h1>{user.matchs[matchBox].major}女同學</h1>
               )}
               <h1>
-                {"\u00A0\u00A0\u00A0\u00A0"} 我是{user.matchs[0].home}人!!
+                {"\u00A0\u00A0\u00A0\u00A0"} 我是{user.matchs[matchBox].home}
+                人!!
               </h1>
             </div>
 
@@ -67,7 +91,7 @@ export default function Match() {
               <img src={LoveEmoji} alt="logo" />
               <h1>喜歡:</h1>
 
-              {user.matchs[0].habits.map((habit, index) => {
+              {user.matchs[matchBox].habits.map((habit, index) => {
                 return (
                   <p>
                     {habit}
@@ -81,7 +105,7 @@ export default function Match() {
             <div className="info-match">
               <img src={AngryEmoji} alt="logo" />
               <h1>討厭: </h1>
-              {user.matchs[0].hates.map((hate, index) => {
+              {user.matchs[matchBox].hates.map((hate) => {
                 return (
                   <p>
                     {hate}
@@ -93,7 +117,7 @@ export default function Match() {
             <div className="info-match">
               <img src={Logo} alt="logo" />
               <h1>常出沒:</h1>
-              {user.matchs[0].gangs.map((gang, index) => {
+              {user.matchs[matchBox].gangs.map((gang, index) => {
                 return (
                   <p>
                     {gang}
@@ -105,11 +129,34 @@ export default function Match() {
             <div className="info-match">
               <img src={CovidEmoji} alt="logo" />
               <h1>有無確診經驗:</h1>
-              <p>{user.matchs[0].positive}</p>
+              <p>{user.matchs[matchBox].positive}</p>
             </div>
             <div className="button-div">
-              <button type="submit">Next</button>
-              <button type="submit">Send</button>
+              {matchBox === user.matchs.length - 1 ? (
+                <button
+                  type="button"
+                  onClick={() => changeMatchBox()}
+                  disabled={true}
+                >
+                  No others match today QQ
+                </button>
+              ) : (
+                <button type="button" onClick={() => changeMatchBox()}>
+                  Next
+                </button>
+              )}
+
+              {friendRequest ? (
+                <button
+                  type="button"
+                  className="selected"
+                  disabled={friendRequest}
+                >
+                  friend request has send!
+                </button>
+              ) : (
+                <button type="submit">Send</button>
+              )}
             </div>
           </form>
         </FormContainer>
@@ -127,6 +174,7 @@ const FormContainer = styled.div`
   background: url(${sky});
   background-size: cover;
   border-left: 0.01rem solid black;
+
   .brand {
     display: flex;
     align-items: center;
@@ -139,6 +187,7 @@ const FormContainer = styled.div`
       color: black;
     }
   }
+
   .info-match {
     display: flex;
     flex-direction: row;
@@ -188,8 +237,11 @@ const FormContainer = styled.div`
     font-size: 1rem;
     text-transform: uppercase;
     &:hover {
-      background-color: #ff6f47;
+      background-color: #4e0eff;
     }
+  }
+  .selected {
+    background-color: #9a86f3;
   }
   span {
     color: white;

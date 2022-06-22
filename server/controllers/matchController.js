@@ -20,6 +20,7 @@ module.exports.getAllMatchs = async (req, res, next) => {
 module.exports.createMatch = async (req, res, next) => {
   const userID = req.userID;
   const users = [];
+  var status = false;
   const user = await Matchs.findOne({
     owner: userID,
   });
@@ -28,15 +29,18 @@ module.exports.createMatch = async (req, res, next) => {
   }
   //演算法 算分數
   const alluser = await User.find({});
-  alluser.every((one) => {
-    user.matchs.forEach((match) => {
-      if (!match.match.includes(one._id)) {
-        users.push(one._id);
+  // console.log(alluser);
+  user.matchs.forEach((match) => {
+    alluser.forEach((one) => {
+      if (match.match.includes(one._id)) {
+        // console.log(match.match);
+        // console.log(one._id);
+        alluser.splice(alluser.indexOf(one), 1);
       }
     });
   });
-  console.log(users);
-  user.matchs.push({ match: users[0] });
+  // console.log(alluser);
+  user.matchs.push({ match: alluser[0]._id });
   user.save();
   return user;
 };
@@ -44,11 +48,54 @@ module.exports.createMatch = async (req, res, next) => {
 module.exports.friendRequest = async (req, res, next) => {
   try {
     var status = false;
+    var friendstatus = false;
+    const user = await Matchs.findOne({ owner: req.body.userID });
+    const friend = await Matchs.findOne({ owner: req.body.friendID });
+    var time = req.body.time;
+    for (let i = 0; i < user.friends.length; i++) {
+      if (user.friends[i].friend.includes(req.body.friendID)) {
+        return res.json({});
+      }
+    }
+    for (let i = 0; i < user.matchs.length; i++) {
+      if (user.matchs[i].match.includes(req.body.friendID)) {
+        user.matchs[i].comfirm = true;
+        status = true;
+      }
+    }
+    if (status) {
+      for (let i = 0; i < friend.matchs.length; i++) {
+        if (
+          friend.matchs[i].match.includes(req.body.userID) &&
+          friend.matchs[i].comfirm === true
+        ) {
+          user.friends.push({ friend: friend.owner, time: time });
+          friend.friends.push({ friend: user.owner, time: time });
+          friendstatus = true;
+          break;
+        }
+      }
+    }
+
+    if (status === true) {
+      user.save();
+    }
+    if (friendstatus === true) {
+      friend.save();
+    }
+    return res.json({});
+  } catch (e) {
+    return res.send(e);
+  }
+};
+
+module.exports.overTime = async (req, res, next) => {
+  try {
+    var status = false;
     const user = await Matchs.findOne({ owner: req.body.userID });
     const friend = await Matchs.findOne({ owner: req.body.friendID });
     for (let i = 0; i < user.matchs.length; i++) {
       if (user.matchs[i].match.includes(req.body.friendID)) {
-        // console.log(user.matchs[i]);
         user.matchs[i].comfirm = true;
         status = true;
       }
@@ -76,7 +123,6 @@ module.exports.friendRequest = async (req, res, next) => {
     return res.send(e);
   }
 };
-
 module.exports.newMatch = async (req, res, next) => {
   try {
     const userID = req.body.userID;
@@ -85,6 +131,7 @@ module.exports.newMatch = async (req, res, next) => {
     });
     user.matchs.push({ match: userID, comfirm: true });
     user.save();
+    this.createMatch({ userID });
     return res.json({ status: true, user });
   } catch (ex) {
     next(ex);

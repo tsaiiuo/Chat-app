@@ -54,6 +54,8 @@ export default function SetIntro() {
     { value: "我自己", label: "我自己" },
     { value: "單身", label: "單身" },
     { value: "暈船", label: "暈船" },
+    { value: "雨傘小偷", label: "雨傘小偷" },
+    { value: "厭世風氣", label: "厭世風氣" },
     { value: "五期六期體育課", label: "五期六期體育課" },
     { value: "期中末考", label: "期中末考" },
     { value: "回宿舍要爬山", label: "回宿舍要爬山" },

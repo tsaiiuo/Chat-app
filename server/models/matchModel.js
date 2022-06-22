@@ -9,6 +9,7 @@ const matchSchema = new mongoose.Schema({
   friends: [
     {
       friend: { type: String, required: true },
+      time: { type: String },
     },
   ],
   matchs: [
